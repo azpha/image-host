@@ -4,7 +4,7 @@ const db = new sqlite3.Database("./data.sqlite");
 
 export default {
     createTable: () => {
-        db.run("CREATE TABLE IF NOT EXISTS imageHostContent (hashName TEXT, originalName TEXT)")
+        db.run("CREATE TABLE IF NOT EXISTS imageHostContent (hashName TEXT, originalName TEXT, url TEXT, type TEXT)")
         return true;
     },
     query: (query, args, callback) => {
