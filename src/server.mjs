@@ -19,7 +19,7 @@ app.get('/', (req,res) => {
 app.use('/upload', UploadRoute);
 app.use('/info', InfoRoute);
 
-app.listen(3000 || process.env.PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
     database.createTable();
-    console.log("Server listening")
+    console.log("Server listening on port " + (process.env.PORT || 3000))
 })
