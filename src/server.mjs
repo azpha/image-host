@@ -17,6 +17,14 @@ app.use('/', ViewerRoute);
 app.use('/upload', UploadRoute);
 app.use('/info', InfoRoute);
 
+app.use((err, req, res, next) => {
+    return res.status(500).json({
+        status: 500,
+        message: "Whoops! An unexpected error occurred!",
+        error: err.message
+    })
+})
+
 app.listen(process.env.PORT || 3000, () => {
     database.createTable();
     console.log("Server listening on port " + (process.env.PORT || 3000))

@@ -5,9 +5,27 @@ import multer from "multer";
 import crypto from 'crypto';
 
 const router = Router();
-const upload = multer({ dest: "./uploads"});
+const upload = multer({ 
+    dest: "./uploads",
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png|gif/;
+        const mimetype = allowedTypes.test(file.mimetype);
+
+        if (!mimetype) {
+            req.fileValidationError = true
+            return cb(null, false, req.fileValidationError)
+        } else return cb(null, true)
+    }
+});
 
 router.post('/', SecretStuff.checkSecret, upload.single('content'), (req,res) => {
+    if (req.fileValidationError) {
+        return res.status(400).json({
+            status: 400,
+            message: "File validation failed, did you upload an unsupported type?"
+        })
+    }
+
     database.query("INSERT INTO imageHostContent (hashName, originalName, type) VALUES (?, ?, ?)", [
         req.file.filename,
         req.file.originalname,
