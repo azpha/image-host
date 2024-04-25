@@ -1,12 +1,12 @@
 import { Router } from "express";
+import SecretStuff from '../utils/Secret.mjs'
 import database from '../utils/Storage.mjs'
 import multer from "multer";
-import path from 'path';
 
 const router = Router();
 const upload = multer({ dest: "./uploads"});
 
-router.post('/', upload.single('content'), (req,res) => {
+router.post('/', SecretStuff.checkSecret, upload.single('content'), (req,res) => {
     database.query("INSERT INTO imageHostContent (hashName, originalName) VALUES (?, ?)", [
         req.file.filename,
         req.file.originalname
